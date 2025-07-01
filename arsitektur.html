@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Arsitektur YukLivestream - Mermaid Diagram</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: true });
+  </script>
+  <style>
+    body { background: #f9f9f9; font-family: sans-serif; }
+    .mermaid { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 2rem; margin: 2rem auto; max-width: 900px; }
+    h1 { text-align: center; }
+  </style>
+</head>
+<body>
+  <h1>Arsitektur YukLivestream</h1>
+  <pre class="mermaid">
+graph TD;
+A[User Host/Viewer]
+B[Next.js Frontend Vercel]
+C[Livepeer Studio API]
+D[RTMP Ingest Server]
+E[HLS Playback CDN Cloudflare/Bunny.net]
+F[Ably Realtime Chat]
+G[OBS/Browser Webcam]
+H[.env API Keys]
+A -- akses --> B
+B -- panggil API --> C
+B -- API Key --> H
+B -- chat --> F
+B -- tampilkan player --> E
+G -- RTMP stream --> D
+D -- proses stream --> E
+E -- HLS playback --> B
+C -- generate key/url --> B
+  </pre>
+</body>
+</html>
