@@ -10,11 +10,13 @@
   "dependencies": {
     "@livepeer/react": "latest",
     "ably": "latest",
+    "autoprefixer": "^10.4.16",
     "axios": "latest",
     "next": "latest",
+    "postcss": "^8.4.38",
     "react": "latest",
     "react-dom": "latest",
-    "tailwindcss": "latest",
+    "tailwindcss": "^3.4.3",
     "video.js": "latest"
   },
   "devDependencies": {

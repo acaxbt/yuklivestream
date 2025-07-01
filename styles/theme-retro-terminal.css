@@ -1,0 +1,105 @@
+/* Retro Terminal Theme */
+:root {
+  --retro-bg: #000;
+  --retro-panel: #000;
+  --retro-border: #22c55e;
+  --retro-border-dark: #16a34a;
+  --retro-text: #22c55e;
+  --retro-label: #4ade80;
+  --retro-input-bg: #000;
+  --retro-input-text: #4ade80;
+  --retro-input-border: #22c55e;
+  --retro-font: 'Fira Mono', 'Consolas', 'monospace';
+}
+
+.retro-terminal {
+  background: var(--retro-bg);
+  color: var(--retro-text);
+  font-family: var(--retro-font);
+  min-height: 100vh;
+}
+
+.retro-terminal .retro-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 0.1fr;
+  gap: 16px;
+  padding: 16px;
+  width: 100vw;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.retro-terminal .retro-panel {
+  background: var(--retro-panel);
+  border: 2px solid var(--retro-border-dark);
+  border-radius: 0.5rem;
+  padding: 8px;
+  box-shadow: 0 0 0 2px var(--retro-border);
+  display: flex;
+  flex-direction: column;
+}
+
+.retro-terminal .retro-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--retro-label);
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+  font-family: var(--retro-font);
+}
+
+.retro-terminal .retro-video {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #000;
+  border-radius: 0.5rem;
+  border: 1.5px solid var(--retro-border);
+}
+
+.retro-terminal .retro-footer {
+  color: var(--retro-label);
+  font-size: 0.8rem;
+  margin-top: 8px;
+  font-family: var(--retro-font);
+}
+
+.retro-terminal .retro-chat-history {
+  flex: 1 1 0%;
+  overflow-y: auto;
+  margin-bottom: 8px;
+  background: #000;
+  border-radius: 0.3rem;
+  border: 1px solid var(--retro-border);
+  padding: 8px;
+  color: var(--retro-text);
+  font-size: 1rem;
+}
+
+.retro-terminal .retro-chat-input {
+  display: flex;
+  gap: 8px;
+}
+
+.retro-terminal .retro-chat-input input {
+  background: var(--retro-input-bg);
+  color: var(--retro-input-text);
+  border: 1.5px solid var(--retro-input-border);
+  border-radius: 0.3rem;
+  padding: 6px 10px;
+  font-family: var(--retro-font);
+}
+
+.retro-terminal .retro-chat-input button {
+  border: 1.5px solid var(--retro-input-border);
+  color: var(--retro-input-text);
+  background: transparent;
+  border-radius: 0.3rem;
+  padding: 6px 16px;
+  font-family: var(--retro-font);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.retro-terminal .retro-chat-input button:hover {
+  background: var(--retro-border);
+  color: #000;
+}

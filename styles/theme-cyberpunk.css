@@ -1,0 +1,113 @@
+/* Cyberpunk theme: vibrant neon, dark background, glowing accents */
+
+:root {
+  --cyber-bg: #18122B;
+  --cyber-card: #232046;
+  --cyber-primary: #FF00CC;
+  --cyber-secondary: #00FFF0;
+  --cyber-accent: #FFD600;
+  --cyber-text: #F8F8FF;
+  --cyber-muted: #6D6A7C;
+  --cyber-glow: 0 0 8px var(--cyber-primary), 0 0 16px var(--cyber-secondary);
+}
+
+.cyberpunk {
+  background: linear-gradient(135deg, #18122B 0%, #232046 100%);
+  color: var(--cyber-text);
+}
+
+.cyberpunk .card {
+  background: var(--cyber-card);
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 32px #0008, 0 0 0 2px var(--cyber-primary);
+  border: none;
+}
+
+.cyberpunk .title {
+  color: var(--cyber-primary);
+  font-family: 'Orbitron', 'Montserrat', 'sans-serif';
+  font-size: 2.2rem;
+  letter-spacing: 0.05em;
+  text-shadow: var(--cyber-glow);
+}
+
+.cyberpunk .live-badge {
+  background: var(--cyber-secondary);
+  color: #18122B;
+  font-weight: bold;
+  border-radius: 0.5rem;
+  padding: 0.2em 0.8em;
+  box-shadow: 0 0 8px var(--cyber-secondary);
+}
+
+.cyberpunk .viewer-badge {
+  background: var(--cyber-accent);
+  color: #232046;
+  font-weight: bold;
+  border-radius: 0.5rem;
+  padding: 0.2em 0.8em;
+  box-shadow: 0 0 8px var(--cyber-accent);
+}
+
+.cyberpunk .chat-box {
+  background: #1A1535CC;
+  border: 1.5px solid var(--cyber-primary);
+  border-radius: 1rem;
+  color: var(--cyber-text);
+  box-shadow: 0 0 12px #FF00CC44;
+}
+
+.cyberpunk .chat-avatar {
+  background: var(--cyber-secondary);
+  color: #18122B;
+  font-weight: bold;
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--cyber-secondary);
+}
+
+.cyberpunk .chat-mention {
+  background: var(--cyber-accent);
+  color: #232046;
+  border-radius: 0.3em;
+  padding: 0 0.3em;
+}
+
+.cyberpunk .reaction-btn {
+  background: var(--cyber-primary);
+  color: #fff;
+  box-shadow: 0 0 12px var(--cyber-primary);
+  border-radius: 50%;
+  border: none;
+  transition: transform 0.1s;
+}
+.cyberpunk .reaction-btn:hover {
+  background: var(--cyber-secondary);
+  color: #18122B;
+  transform: scale(1.15);
+  box-shadow: 0 0 16px var(--cyber-secondary);
+}
+
+.cyberpunk .emoji-picker {
+  background: #232046;
+  border: 1.5px solid var(--cyber-primary);
+  border-radius: 1rem;
+  box-shadow: 0 0 16px #FF00CC44;
+}
+
+.cyberpunk input, .cyberpunk textarea {
+  background: #1A1535;
+  color: var(--cyber-text);
+  border: 1.5px solid var(--cyber-primary);
+  border-radius: 0.7rem;
+}
+
+.cyberpunk .pip-btn {
+  background: var(--cyber-secondary);
+  color: #18122B;
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--cyber-secondary);
+}
+
+.cyberpunk .fly-heart {
+  filter: drop-shadow(0 0 8px var(--cyber-primary));
+}
