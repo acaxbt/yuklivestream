@@ -1,0 +1,20 @@
+
+flowchart TD
+  A[pages/index.tsx] -->|Landing| B[pages/watch/[streamId].tsx]
+  A -->|Landing| C[pages/host.tsx]
+  A -->|Landing| D[pages/custom-player.tsx]
+  A -->|Landing| E[pages/webcam.tsx]
+  A -->|Landing| F[pages/retro-terminal.tsx]
+  B -->|Player| G[components/VideoPlayer.tsx]
+  B -->|Chat| H[components/ChatBox.tsx]
+  B -->|Chat| I[components/ChatBoxCustom.tsx]
+  subgraph API
+    J[pages/api/livepeer/create-stream.ts]
+    K[pages/api/livepeer/list-streams.ts]
+    L[pages/api/livepeer/stop-stream.ts]
+    M[pages/api/livepeer/stream-status.ts]
+  end
+  C -->|Host| J
+  C -->|Host| K
+  C -->|Host| L
+  C -->|Host| M
