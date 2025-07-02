@@ -7,6 +7,19 @@ interface VideoPlayerProps {
   startTime?: string; // ISO string, optional
 }
 
+const getLLHLSUrl = (url: string) => {
+  // Ganti /hls/ menjadi /llhls/ jika ditemukan, atau tambahkan /llhls/ jika belum ada
+  if (url.includes('/hls/')) {
+    return url.replace('/hls/', '/llhls/');
+  }
+  // Jika sudah /llhls/, biarkan
+  if (url.includes('/llhls/')) {
+    return url;
+  }
+  // Fallback: coba tambahkan /llhls/ sebelum playbackId
+  return url.replace(/(\/)([a-zA-Z0-9_-]+)(\/index\.m3u8)/, '/llhls/$2/index.m3u8');
+};
+
 const VideoPlayer: React.FC<VideoPlayerProps> = ({ playbackUrl, startTime }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const playerRef = useRef<any>(null);
@@ -14,6 +27,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playbackUrl, startTime }) => 
   const [isError, setIsError] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
   const [countdown, setCountdown] = useState<string | null>(null);
+  const [latency, setLatency] = useState<number | null>(null); // Tambah state latency
 
   // Countdown logic
   useEffect(() => {
@@ -35,24 +49,50 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playbackUrl, startTime }) => 
   }, [startTime]);
 
   useEffect(() => {
-    if (videoRef.current && !playerRef.current) {
-      playerRef.current = videojs(videoRef.current, {
-        controls: true,
-        autoplay: false,
-        preload: 'auto',
-        sources: [
-          {
-            src: playbackUrl,
-            type: 'application/x-mpegURL',
+    let triedFallback = false;
+    let player;
+    const llhlsUrl = getLLHLSUrl(playbackUrl);
+    const hlsUrl = playbackUrl;
+    function setupPlayer(srcUrl: string) {
+      if (videoRef.current) {
+        player = videojs(videoRef.current, {
+          controls: true,
+          autoplay: false,
+          preload: 'auto',
+          sources: [
+            {
+              src: srcUrl,
+              type: 'application/x-mpegURL',
+            },
+          ],
+          html5: {
+            vhs: {
+              liveSyncDuration: 2,
+              maxBufferLength: 4,
+              maxLiveSyncPlaybackRate: 1.1,
+              enableLowInitialPlaylist: true,
+            },
           },
-        ],
-      });
-      playerRef.current.on('waiting', () => setIsWaiting(true));
-      playerRef.current.on('playing', () => setIsWaiting(false));
-      playerRef.current.on('error', () => setIsError(true));
-      playerRef.current.on('loadeddata', () => setIsError(false));
+        });
+        playerRef.current = player;
+        player.on('waiting', () => setIsWaiting(true));
+        player.on('playing', () => setIsWaiting(false));
+        player.on('error', () => {
+          setIsError(true);
+          // Fallback ke HLS jika LL-HLS gagal dan belum pernah fallback
+          if (!triedFallback && srcUrl === llhlsUrl) {
+            triedFallback = true;
+            player.src({ src: hlsUrl, type: 'application/x-mpegURL' });
+            setIsError(false);
+          }
+        });
+        player.on('loadeddata', () => setIsError(false));
+      }
+    }
+    if (videoRef.current && !playerRef.current) {
+      setupPlayer(llhlsUrl);
     } else if (playerRef.current) {
-      playerRef.current.src({ src: playbackUrl, type: 'application/x-mpegURL' });
+      playerRef.current.src({ src: llhlsUrl, type: 'application/x-mpegURL' });
     }
     return () => {
       if (playerRef.current) {
@@ -65,6 +105,38 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playbackUrl, startTime }) => 
   useEffect(() => {
     setShowOverlay(isWaiting || isError || !!countdown);
   }, [isWaiting, isError, countdown]);
+
+  // Latency checker
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (playerRef.current) {
+      interval = setInterval(() => {
+        try {
+          // Ambil currentTime player (waktu video yang sedang diputar)
+          const video = playerRef.current.el().querySelector('video');
+          if (video) {
+            // Estimasi waktu server: gunakan Date.now() (UTC ms)
+            // Estimasi waktu player: currentTime (detik) + (startTime jika ada)
+            let playerTime = video.currentTime;
+            let serverNow = Date.now() / 1000; // detik
+            if (startTime) {
+              // Jika stream ada startTime (ISO), tambahkan ke currentTime
+              const startEpoch = new Date(startTime).getTime() / 1000;
+              playerTime = startEpoch + video.currentTime;
+            }
+            // Latency = serverNow - playerTime
+            const estLatency = serverNow - playerTime;
+            if (estLatency > 0 && estLatency < 120) {
+              setLatency(estLatency);
+            } else {
+              setLatency(null);
+            }
+          }
+        } catch {}
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [startTime, playbackUrl, showOverlay]);
 
   // PIP handler
   const handlePip = () => {
@@ -88,6 +160,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playbackUrl, startTime }) => 
           ) : isWaiting ? (
             <div className="text-lg font-semibold animate-pulse">Buffering...</div>
           ) : null}
+        </div>
+      )}
+      {/* Indikator Latency */}
+      {latency !== null && (
+        <div className="absolute top-3 right-3 bg-black/70 text-white px-3 py-1 rounded text-xs z-30">
+          Latency: {latency.toFixed(1)} detik
         </div>
       )}
       {/* PIP Button */}

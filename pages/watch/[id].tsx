@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import VideoPlayer from '../../components/VideoPlayer';
 import ChatBox from '../../components/ChatBox';
+import LivepeerPlayerDemo from '../../components/LivepeerPlayerDemo';
+import LivepeerPlayerCDN from '../../components/LivepeerPlayerCDN';
 import axios from 'axios';
 
 export default function WatchPage() {
@@ -36,8 +38,16 @@ export default function WatchPage() {
         <div>Loading stream...</div>
       ) : isActive ? (
         <>
-          <div className="w-full max-w-2xl mb-4">
-            <VideoPlayer playbackUrl={playbackUrl} />
+          <div className="w-full max-w-2xl mb-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <VideoPlayer playbackUrl={playbackUrl} />
+            </div>
+            <div>
+              <LivepeerPlayerDemo playbackUrl={playbackUrl} />
+            </div>
+            <div>
+              <LivepeerPlayerCDN playbackUrl={playbackUrl} />
+            </div>
           </div>
           <div className="w-full max-w-2xl">
             <ChatBox streamId={id as string} />

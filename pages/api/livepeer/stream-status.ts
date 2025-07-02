@@ -27,6 +27,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     );
     res.status(200).json(response.data);
   } catch (error: any) {
-    res.status(500).json({ error: error?.response?.data || error.message });
+    // Tambahkan log error detail ke response
+    res.status(500).json({
+      error: error?.response?.data || error.message,
+      detail: error?.response?.data || error.toString(),
+      status: error?.response?.status || null,
+      headers: error?.response?.headers || null,
+    });
   }
 }

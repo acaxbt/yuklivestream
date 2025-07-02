@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@daily-co/daily-js": "^0.80.0",
     "@livepeer/react": "latest",
     "ably": "latest",
     "autoprefixer": "^10.4.16",
