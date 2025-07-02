@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import VideoPlayer from '../../components/VideoPlayer';
 import ChatBox from '../../components/ChatBox';
-import LivepeerPlayerDemo from '../../components/LivepeerPlayerDemo';
 import LivepeerPlayerCDN from '../../components/LivepeerPlayerCDN';
 import axios from 'axios';
 
