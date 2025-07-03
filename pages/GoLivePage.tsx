@@ -82,6 +82,10 @@ const GoLivePage: React.FC = () => {
 
   // Show local preview
   useEffect(() => {
+    if (typeof window === 'undefined' || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      setError('getUserMedia tidak didukung di browser ini.');
+      return;
+    }
     let stream: MediaStream;
     navigator.mediaDevices.getUserMedia({
       video: {
