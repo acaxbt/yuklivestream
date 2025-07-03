@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import VideoPlayer from '../components/VideoPlayer';
+import LivepeerReactPlayer from '../components/LivepeerReactPlayer';
 import ChatBoxCustom from '../components/ChatBoxCustom';
 
 export default function RetroTerminalPlayer() {
@@ -83,7 +83,10 @@ export default function RetroTerminalPlayer() {
           </div>
           <div className="retro-label">[ LIVE STREAM ]</div>
           <div className="retro-video flex items-center justify-center flex-1 min-h-0" style={{height: '100%'}}>
-            <VideoPlayer playbackUrl={playUrl} />
+            {/* Ganti VideoPlayer ke LivepeerReactPlayer */}
+            {playUrl && (
+              <LivepeerReactPlayer playbackId={getPlaybackIdFromUrl(playUrl)} />
+            )}
           </div>
           <div className="retro-footer">URL: {playUrl}</div>
         </div>
@@ -144,4 +147,10 @@ export default function RetroTerminalPlayer() {
       </div>
     </div>
   );
+}
+
+// Helper function di bawah komponen utama
+function getPlaybackIdFromUrl(url: string): string {
+  const match = url.match(/\/hls\/([\w-]+)\//);
+  return match ? match[1] : '';
 }

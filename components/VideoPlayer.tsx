@@ -17,7 +17,7 @@ const getLLHLSUrl = (url: string) => {
     return url;
   }
   // Fallback: coba tambahkan /llhls/ sebelum playbackId
-  return url.replace(/(\/)([a-zA-Z0-9_-]+)(\/index\.m3u8)/, '/llhls/$2/index.m3u8');
+  return url.replace(/(\/)([a-zA-Z0-9_-]+)(\/index\.m3u8)/, '/hls/$2/index.m3u8');
 };
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({ playbackUrl, startTime }) => {

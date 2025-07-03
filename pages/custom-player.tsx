@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import VideoPlayer from '../components/VideoPlayer';
+import LivepeerReactPlayer from '../components/LivepeerReactPlayer';
 import ChatBoxCustom from '../components/ChatBoxCustom';
 import axios from 'axios';
 
@@ -137,7 +137,8 @@ export default function CustomPlayerPage() {
             {/* Video player kiri */}
             <div className="flex-1 flex flex-col items-center" ref={playerBoxRef}>
               <div className="w-full aspect-video rounded-2xl overflow-hidden border border-gray-200 bg-black flex items-center justify-center">
-                <VideoPlayer playbackUrl={playUrl} />
+                {/* Ganti VideoPlayer ke LivepeerReactPlayer */}
+                {streamId && <LivepeerReactPlayer playbackId={streamId} />}
               </div>
             </div>
             {/* Livechat kanan, tinggi sama dengan player */}

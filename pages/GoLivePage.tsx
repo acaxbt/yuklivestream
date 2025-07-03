@@ -115,24 +115,25 @@ const GoLivePage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white p-4">
-      <h1 className="text-2xl font-bold mb-4">Go Live (Daily + Livepeer)</h1>
-      <div className="w-full max-w-xs flex flex-col items-center gap-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white p-2 sm:p-4">
+      <h1 className="text-xl sm:text-2xl font-bold mb-4 text-center">Go Live (Daily + Livepeer)</h1>
+      <div className="w-full max-w-xs sm:max-w-sm md:max-w-md flex flex-col items-center gap-4">
         <video
           ref={videoRef}
           autoPlay
           muted
           playsInline
           className="rounded-lg w-full aspect-video bg-black border border-gray-700"
+          style={{ maxHeight: 240 }}
         />
         {isLive && (
-          <div className="flex items-center gap-2 text-red-500 font-bold text-lg">
+          <div className="flex items-center gap-2 text-red-500 font-bold text-base sm:text-lg">
             <span className="animate-pulse">●</span> LIVE
           </div>
         )}
-        {error && <div className="text-red-400 text-sm">{error}</div>}
+        {error && <div className="text-red-400 text-xs sm:text-sm text-center break-words">{error}</div>}
         <button
-          className={`w-full py-3 rounded-lg font-bold text-lg ${isLive ? 'bg-red-600' : 'bg-green-600'} mt-2`}
+          className={`w-full py-2 sm:py-3 rounded-lg font-bold text-base sm:text-lg ${isLive ? 'bg-red-600' : 'bg-green-600'} mt-2`}
           onClick={isLive ? stopLive : startLive}
           disabled={loading}
         >

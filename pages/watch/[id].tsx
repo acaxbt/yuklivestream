@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import VideoPlayer from '../../components/VideoPlayer';
 import ChatBox from '../../components/ChatBox';
-import LivepeerPlayerCDN from '../../components/LivepeerPlayerCDN';
+import LivepeerReactPlayer from '../../components/LivepeerReactPlayer';
 import axios from 'axios';
+import { usePlaybackInfo } from '@livepeer/react';
 
 export default function WatchPage() {
   const router = useRouter();
@@ -11,6 +11,15 @@ export default function WatchPage() {
   const [playbackUrl, setPlaybackUrl] = useState('');
   const [loading, setLoading] = useState(true);
   const [isActive, setIsActive] = useState(false);
+  const [playbackId, setPlaybackId] = useState<string | null>(null);
+
+  // Playback info dari player
+  const { data: playbackInfo } = usePlaybackInfo({ playbackId: playbackId || undefined });
+  useEffect(() => {
+    if (playbackInfo) {
+      console.log('Livepeer playbackInfo:', playbackInfo);
+    }
+  }, [playbackInfo]);
 
   useEffect(() => {
     if (!id) return;
@@ -18,7 +27,8 @@ export default function WatchPage() {
       try {
         const res = await axios.get(`/api/livepeer/stream-status?id=${id}`);
         setIsActive(res.data.isActive);
-        setPlaybackUrl(`https://livepeercdn.com/hls/${res.data.playbackId}/index.m3u8`);
+        setPlaybackUrl(`https://playback.livepeer.studio/hls/${res.data.playbackId}/index.m3u8`);
+        setPlaybackId(res.data.playbackId);
       } catch {
         setIsActive(false);
       } finally {
@@ -33,20 +43,24 @@ export default function WatchPage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
       <h1 className="text-2xl font-bold mb-4">Live Stream</h1>
+      {playbackId && (
+        <div className="mb-2 text-sm text-gray-500">Playback ID: <span className="font-mono">{playbackId}</span></div>
+      )}
       {loading ? (
         <div>Loading stream...</div>
       ) : isActive ? (
         <>
-          <div className="w-full max-w-2xl mb-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <VideoPlayer playbackUrl={playbackUrl} />
-            </div>
-            <div>
-              <LivepeerPlayerDemo playbackUrl={playbackUrl} />
-            </div>
-            <div>
-              <LivepeerPlayerCDN playbackUrl={playbackUrl} />
-            </div>
+          <div className="w-full max-w-2xl mb-4 flex flex-col items-center">
+            {playbackId && (
+              <>
+                <div className="w-full max-w-2xl aspect-video flex items-center justify-center">
+                  <LivepeerReactPlayer playbackId={playbackId} autoPlay />
+                </div>
+                <div className="mt-2 text-xs text-gray-400 break-all w-full text-left">
+                  HLS URL: <span className="font-mono">https://livepeercdn.studio/hls/{playbackId}/index.m3u8</span>
+                </div>
+              </>
+            )}
           </div>
           <div className="w-full max-w-2xl">
             <ChatBox streamId={id as string} />

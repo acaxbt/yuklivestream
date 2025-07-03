@@ -7,11 +7,13 @@ interface ChatBoxProps {
 
 const ablyApiKey = process.env.NEXT_PUBLIC_ABLY_API_KEY || '';
 
+type ChannelType = ReturnType<Ably.Realtime['channels']['get']>;
+
 const ChatBox: React.FC<ChatBoxProps> = ({ streamId }) => {
   const [messages, setMessages] = useState<{ user: string; text: string }[]>([]);
   const [input, setInput] = useState('');
   const ablyRef = useRef<Ably.Realtime | null>(null);
-  const channelRef = useRef<Ably.Types.RealtimeChannelCallbacks | null>(null);
+  const channelRef = useRef<ChannelType | null>(null);
 
   useEffect(() => {
     if (!ablyApiKey) return;
